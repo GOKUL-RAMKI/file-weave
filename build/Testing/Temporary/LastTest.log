@@ -1,0 +1,93 @@
+Start testing: Nov 05 20:20 India Standard Time
+----------------------------------------------------------
+1/6 Testing: test_scanner
+1/6 Test: test_scanner
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_scanner.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_scanner" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"test_scanner" end time: Nov 05 20:20 India Standard Time
+"test_scanner" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/6 Testing: test_tokenizer
+2/6 Test: test_tokenizer
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_tokenizer.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_tokenizer" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"test_tokenizer" end time: Nov 05 20:20 India Standard Time
+"test_tokenizer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/6 Testing: test_similarity
+3/6 Test: test_similarity
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_similarity.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_similarity" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"test_similarity" end time: Nov 05 20:20 India Standard Time
+"test_similarity" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/6 Testing: test_graph_builder
+4/6 Test: test_graph_builder
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_graph_builder.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_graph_builder" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_graph_builder" end time: Nov 05 20:20 India Standard Time
+"test_graph_builder" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/6 Testing: test_kruskal
+5/6 Test: test_kruskal
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_kruskal.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_kruskal" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"test_kruskal" end time: Nov 05 20:20 India Standard Time
+"test_kruskal" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/6 Testing: test_layout
+6/6 Test: test_layout
+Command: "D:/stuff/second-yr-sem-3/daa/daa_package/project/build/Release/test_layout.exe"
+Directory: D:/stuff/second-yr-sem-3/daa/daa_package/project/build
+"test_layout" start time: Nov 05 20:20 India Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   1.29 sec
+----------------------------------------------------------
+Test Passed.
+"test_layout" end time: Nov 05 20:20 India Standard Time
+"test_layout" time elapsed: 00:00:01
+----------------------------------------------------------
+
+End testing: Nov 05 20:20 India Standard Time

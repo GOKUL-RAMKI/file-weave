@@ -1,0 +1,11 @@
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/core.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/app.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_scanner.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_tokenizer.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_similarity.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_graph_builder.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_kruskal.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/test_layout.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/RUN_TESTS.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/ALL_BUILD.dir
+D:/stuff/second-yr-sem-3/daa/daa_package/project/build/CMakeFiles/ZERO_CHECK.dir
