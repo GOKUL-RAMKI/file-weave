@@ -1,0 +1,57 @@
+# Build output
+build/
+out/
+bin/
+obj/
+*.exe
+*.dll
+*.lib
+*.pdb
+*.ilk
+*.exp
+*.obj
+*.idb
+*.tlog
+*.recipe
+
+# CMake / Visual Studio generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CMakeUserPresets.json
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+
+# Qt generated files
+*_autogen/
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+.qt/
+*.qmlc
+*.jsc
+
+# Logs and local tool output
+*.log
+aqtinstall.log
+!sample_data/**/*.log
+
+# Old/running executables kept aside during a rebuild
+app.exe.old
+
+# Local-only agent instructions
+docs/AGENTS.md
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp

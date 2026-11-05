@@ -1,7 +1,0 @@
-test_scanner 8 0.0220719
-test_tokenizer 8 0.0167197
-test_similarity 8 0.0241478
-test_graph_builder 8 0.0325613
-test_kruskal 8 0.0323836
-test_layout 5 0.258606
----
