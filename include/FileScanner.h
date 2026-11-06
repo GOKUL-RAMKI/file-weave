@@ -5,9 +5,11 @@
 
 #include "FileNode.h"
 
+using namespace std;
+
 struct ScanResult {
-    std::vector<FileNode> files;
+    vector<FileNode> files;
     int skipped = 0;
 };
 
-ScanResult scanDirectory(const std::string& root);
+ScanResult scanDirectory(const string& root);

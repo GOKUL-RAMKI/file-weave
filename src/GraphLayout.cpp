@@ -6,6 +6,8 @@
 
 #include "DisjointSet.h"
 
+using namespace std;
+
 namespace {
 
 constexpr double areaWidth = 1400.0;
@@ -16,34 +18,34 @@ constexpr double gap = 40.0;
 constexpr double minBox = 80.0;
 
 struct Cluster {
-    std::vector<int> nodes;
-    std::vector<RelationshipEdge> edges;
-    std::vector<Point> points;
+    vector<int> nodes;
+    vector<RelationshipEdge> edges;
+    vector<Point> points;
     double width = 0;
     double height = 0;
 };
 
-std::vector<Point> forceLayout(int count, const std::vector<RelationshipEdge>& edges, double ideal, int iterations) {
-    std::vector<Point> points(count);
+vector<Point> forceLayout(int count, const vector<RelationshipEdge>& edges, double ideal, int iterations) {
+    vector<Point> points(count);
     if (count <= 1) return points;
 
-    int columns = static_cast<int>(std::ceil(std::sqrt(static_cast<double>(count))));
+    int columns = static_cast<int>(ceil(sqrt(static_cast<double>(count))));
     int rows = (count + columns - 1) / columns;
     for (int i = 0; i < count; ++i) {
         points[i] = { (i % columns) * ideal, (i / columns) * ideal };
     }
     Point center{ (columns - 1) * ideal / 2.0, (rows - 1) * ideal / 2.0 };
 
-    iterations = std::max(1, iterations);
+    iterations = max(1, iterations);
     for (int step = 0; step < iterations; ++step) {
-        std::vector<Point> displacement(count);
+        vector<Point> displacement(count);
 
         for (int i = 0; i < count; ++i) {
             for (int j = i + 1; j < count; ++j) {
                 double dx = points[i].x - points[j].x;
                 double dy = points[i].y - points[j].y;
-                double distance = std::max(0.01, std::sqrt(dx * dx + dy * dy));
-                double force = std::min(ideal * ideal / distance, ideal);
+                double distance = max(0.01, sqrt(dx * dx + dy * dy));
+                double force = min(ideal * ideal / distance, ideal);
                 dx = dx / distance * force;
                 dy = dy / distance * force;
                 displacement[i].x += dx;
@@ -57,8 +59,8 @@ std::vector<Point> forceLayout(int count, const std::vector<RelationshipEdge>& e
             if (edge.a < 0 || edge.b < 0 || edge.a >= count || edge.b >= count) continue;
             double dx = points[edge.a].x - points[edge.b].x;
             double dy = points[edge.a].y - points[edge.b].y;
-            double distance = std::max(0.01, std::sqrt(dx * dx + dy * dy));
-            double force = std::min(distance * distance / ideal, ideal);
+            double distance = max(0.01, sqrt(dx * dx + dy * dy));
+            double force = min(distance * distance / ideal, ideal);
             dx = dx / distance * force;
             dy = dy / distance * force;
             displacement[edge.a].x -= dx;
@@ -74,9 +76,9 @@ std::vector<Point> forceLayout(int count, const std::vector<RelationshipEdge>& e
 
         double temperature = ideal * (1.0 - static_cast<double>(step) / iterations);
         for (int i = 0; i < count; ++i) {
-            double length = std::sqrt(displacement[i].x * displacement[i].x + displacement[i].y * displacement[i].y);
+            double length = sqrt(displacement[i].x * displacement[i].x + displacement[i].y * displacement[i].y);
             if (length <= 0) continue;
-            double scale = std::min(length, temperature) / length;
+            double scale = min(length, temperature) / length;
             points[i].x += displacement[i].x * scale;
             points[i].y += displacement[i].y * scale;
         }
@@ -85,10 +87,10 @@ std::vector<Point> forceLayout(int count, const std::vector<RelationshipEdge>& e
     double minX = points[0].x, maxX = points[0].x;
     double minY = points[0].y, maxY = points[0].y;
     for (const Point& point : points) {
-        minX = std::min(minX, point.x);
-        maxX = std::max(maxX, point.x);
-        minY = std::min(minY, point.y);
-        maxY = std::max(maxY, point.y);
+        minX = min(minX, point.x);
+        maxX = max(maxX, point.x);
+        minY = min(minY, point.y);
+        maxY = max(maxY, point.y);
     }
     double offsetX = (minX + maxX) / 2.0;
     double offsetY = (minY + maxY) / 2.0;
@@ -100,16 +102,16 @@ std::vector<Point> forceLayout(int count, const std::vector<RelationshipEdge>& e
     return points;
 }
 
-std::vector<Cluster> buildClusters(int nodeCount, const std::vector<RelationshipEdge>& forest) {
+vector<Cluster> buildClusters(int nodeCount, const vector<RelationshipEdge>& forest) {
     DisjointSet sets(nodeCount);
     for (const RelationshipEdge& edge : forest) {
         if (edge.a < 0 || edge.b < 0 || edge.a >= nodeCount || edge.b >= nodeCount) continue;
         sets.unite(edge.a, edge.b);
     }
 
-    std::vector<int> rootToCluster(nodeCount, -1);
-    std::vector<int> clusterOf(nodeCount, -1);
-    std::vector<Cluster> clusters;
+    vector<int> rootToCluster(nodeCount, -1);
+    vector<int> clusterOf(nodeCount, -1);
+    vector<Cluster> clusters;
 
     for (int i = 0; i < nodeCount; ++i) {
         int root = sets.find(i);
@@ -123,9 +125,9 @@ std::vector<Cluster> buildClusters(int nodeCount, const std::vector<Relationship
         clusters[index].nodes.push_back(i);
     }
 
-    std::vector<int> localIndex(nodeCount, -1);
+    vector<int> localIndex(nodeCount, -1);
     for (const Cluster& cluster : clusters) {
-        for (std::size_t i = 0; i < cluster.nodes.size(); ++i) {
+        for (size_t i = 0; i < cluster.nodes.size(); ++i) {
             localIndex[cluster.nodes[i]] = static_cast<int>(i);
         }
     }
@@ -146,13 +148,13 @@ std::vector<Cluster> buildClusters(int nodeCount, const std::vector<Relationship
 
 }
 
-std::vector<Point> computeLayout(int nodeCount, const std::vector<RelationshipEdge>& forest, int iterations) {
-    std::vector<Point> points(nodeCount);
+vector<Point> computeLayout(int nodeCount, const vector<RelationshipEdge>& forest, int iterations) {
+    vector<Point> points(nodeCount);
     if (nodeCount <= 1) return points;
 
     double perNodeArea = areaWidth * areaHeight / static_cast<double>(nodeCount);
-    double ideal = std::sqrt(perNodeArea);
-    std::vector<Cluster> clusters = buildClusters(nodeCount, forest);
+    double ideal = sqrt(perNodeArea);
+    vector<Cluster> clusters = buildClusters(nodeCount, forest);
 
     for (Cluster& cluster : clusters) {
         int count = static_cast<int>(cluster.nodes.size());
@@ -161,16 +163,16 @@ std::vector<Point> computeLayout(int nodeCount, const std::vector<RelationshipEd
         double minX = cluster.points[0].x, maxX = cluster.points[0].x;
         double minY = cluster.points[0].y, maxY = cluster.points[0].y;
         for (const Point& point : cluster.points) {
-            minX = std::min(minX, point.x);
-            maxX = std::max(maxX, point.x);
-            minY = std::min(minY, point.y);
-            maxY = std::max(maxY, point.y);
+            minX = min(minX, point.x);
+            maxX = max(maxX, point.x);
+            minY = min(minY, point.y);
+            maxY = max(maxY, point.y);
         }
 
         double width = maxX - minX;
         double height = maxY - minY;
-        double target = std::max(minBox, std::sqrt(perNodeArea * count));
-        double scale = std::max(width, height) > 0 ? target / std::max(width, height) : 1.0;
+        double target = max(minBox, sqrt(perNodeArea * count));
+        double scale = max(width, height) > 0 ? target / max(width, height) : 1.0;
         for (Point& point : cluster.points) {
             point.x *= scale;
             point.y *= scale;
@@ -179,11 +181,11 @@ std::vector<Point> computeLayout(int nodeCount, const std::vector<RelationshipEd
         cluster.height = height * scale;
     }
 
-    std::vector<int> order(clusters.size());
-    for (std::size_t i = 0; i < order.size(); ++i) order[i] = static_cast<int>(i);
-    std::sort(order.begin(), order.end(), [&](int left, int right) {
-        double leftSize = std::max(clusters[left].width, clusters[left].height);
-        double rightSize = std::max(clusters[right].width, clusters[right].height);
+    vector<int> order(clusters.size());
+    for (size_t i = 0; i < order.size(); ++i) order[i] = static_cast<int>(i);
+    sort(order.begin(), order.end(), [&](int left, int right) {
+        double leftSize = max(clusters[left].width, clusters[left].height);
+        double rightSize = max(clusters[right].width, clusters[right].height);
         return leftSize > rightSize;
     });
 
@@ -194,8 +196,8 @@ std::vector<Point> computeLayout(int nodeCount, const std::vector<RelationshipEd
 
     for (int index : order) {
         Cluster& cluster = clusters[index];
-        double boxWidth = std::max(cluster.width, minBox);
-        double boxHeight = std::max(cluster.height, minBox);
+        double boxWidth = max(cluster.width, minBox);
+        double boxHeight = max(cluster.height, minBox);
 
         if (cursorX > 0 && cursorX + boxWidth > packWidth) {
             cursorX = 0;
@@ -205,17 +207,17 @@ std::vector<Point> computeLayout(int nodeCount, const std::vector<RelationshipEd
 
         double centerX = cursorX + boxWidth / 2.0;
         double centerY = cursorY + boxHeight / 2.0;
-        for (std::size_t i = 0; i < cluster.nodes.size(); ++i) {
+        for (size_t i = 0; i < cluster.nodes.size(); ++i) {
             points[cluster.nodes[i]] = { centerX + cluster.points[i].x, centerY + cluster.points[i].y };
         }
 
         cursorX += boxWidth + gap;
-        rowHeight = std::max(rowHeight, boxHeight);
-        packedWidth = std::max(packedWidth, cursorX - gap);
+        rowHeight = max(rowHeight, boxHeight);
+        packedWidth = max(packedWidth, cursorX - gap);
     }
 
     double packedHeight = cursorY + rowHeight;
-    double scale = std::min({ 1.0, areaWidth / std::max(packedWidth, 1.0), areaHeight / std::max(packedHeight, 1.0) });
+    double scale = min({ 1.0, areaWidth / max(packedWidth, 1.0), areaHeight / max(packedHeight, 1.0) });
     double offsetX = (areaWidth - packedWidth * scale) / 2.0;
     double offsetY = (areaHeight - packedHeight * scale) / 2.0;
     for (Point& point : points) {

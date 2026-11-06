@@ -4,4 +4,6 @@
 
 #include "FileNode.h"
 
-FileNode collectMetadata(const std::filesystem::path& path);
+using namespace std;
+
+FileNode collectMetadata(const filesystem::path& path);

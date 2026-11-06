@@ -5,7 +5,9 @@
 
 #include "FileNode.h"
 
-double jaccard(const std::vector<std::string>& a, const std::vector<std::string>& b);
-double editSimilarity(const std::string& a, const std::string& b);
-double pathProximity(const std::string& dirA, const std::string& dirB);
+using namespace std;
+
+double jaccard(const vector<string>& a, const vector<string>& b);
+double editSimilarity(const string& a, const string& b);
+double pathProximity(const string& dirA, const string& dirB);
 double metadataSimilarity(const FileNode& a, const FileNode& b);

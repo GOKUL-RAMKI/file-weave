@@ -97,8 +97,10 @@ DLLs and plugins are placed next to `app.exe`.
 2. Click **Scan**. The app scans the folder recursively and builds the relationship graph.
 3. Adjust the threshold to control how similar two files must be before they are connected.
 4. Pan with the mouse drag / scrollbars and zoom with the mouse wheel.
-5. Click a node or edge to inspect its details. On large graphs, labels are shown only for
-   the selected node or edge to keep the view readable.
+5. Click a node or edge to inspect its details. Selecting a node shows an **Open File**
+   button in the bottom panel that opens that file with the system default application.
+   On large graphs, labels are shown only for the selected node or edge to keep the view
+   readable.
 6. Use **Remove** to remove the selected folder from the list.
 
 Disconnected groups in the Kruskal forest are laid out and packed as separate clusters.

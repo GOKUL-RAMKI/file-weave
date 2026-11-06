@@ -6,11 +6,13 @@
 #include <utility>
 #include <vector>
 
+using namespace std;
+
 class InvertedIndex {
 public:
-    void add(const std::string& token, int file);
-    std::vector<std::pair<int, int>> pairs(std::size_t maxPostings) const;
+    void add(const string& token, int file);
+    vector<pair<int, int>> pairs(size_t maxPostings) const;
 
 private:
-    std::unordered_map<std::string, std::vector<int>> map;
+    unordered_map<string, vector<int>> map;
 };

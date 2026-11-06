@@ -5,9 +5,11 @@
 #include "FileNode.h"
 #include "RelationshipEdge.h"
 
+using namespace std;
+
 struct Graph {
-    std::vector<FileNode> nodes;
-    std::vector<RelationshipEdge> edges;
+    vector<FileNode> nodes;
+    vector<RelationshipEdge> edges;
 };
 
-Graph buildGraph(std::vector<FileNode> nodes, double threshold);
+Graph buildGraph(vector<FileNode> nodes, double threshold);

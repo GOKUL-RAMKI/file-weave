@@ -4,4 +4,6 @@
 
 #include "RelationshipEdge.h"
 
-std::vector<RelationshipEdge> kruskal(int nodeCount, std::vector<RelationshipEdge> edges);
+using namespace std;
+
+vector<RelationshipEdge> kruskal(int nodeCount, vector<RelationshipEdge> edges);

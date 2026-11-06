@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QDateTime>
+#include <QDesktopServices>
 #include <QDoubleSpinBox>
 #include <QFileDialog>
 #include <QHBoxLayout>
@@ -15,12 +16,15 @@
 #include <QProgressBar>
 #include <QPushButton>
 #include <QTextBrowser>
+#include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
 
 #include "FileScanner.h"
 #include "GraphView.h"
 #include "RelationshipScorer.h"
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     setWindowTitle("File Relationship Graph Visualizer");
@@ -78,7 +82,16 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     details->setMinimumHeight(140);
     details->setMaximumHeight(200);
     details->setHtml("<i>Select a node or edge to inspect it.</i>");
-    graphLayout->addWidget(details);
+
+    openFileButton = new QPushButton("Open File", graphArea);
+    openFileButton->setVisible(false);
+
+    QWidget* detailsArea = new QWidget(graphArea);
+    QHBoxLayout* detailsLayout = new QHBoxLayout(detailsArea);
+    detailsLayout->setContentsMargins(0, 0, 0, 0);
+    detailsLayout->addWidget(details, 1);
+    detailsLayout->addWidget(openFileButton, 0, Qt::AlignTop);
+    graphLayout->addWidget(detailsArea);
 
     layout->addWidget(graphArea, 1);
     setCentralWidget(central);
@@ -86,8 +99,10 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(addButton, &QPushButton::clicked, this, &MainWindow::addDirectory);
     connect(removeButton, &QPushButton::clicked, this, &MainWindow::removeDirectory);
     connect(scanButton, &QPushButton::clicked, this, &MainWindow::scan);
+    connect(openFileButton, &QPushButton::clicked, this, &MainWindow::openSelectedFile);
     connect(view, &GraphView::nodeSelected, this, &MainWindow::showNode);
     connect(view, &GraphView::edgeSelected, this, &MainWindow::showEdge);
+    connect(view, &GraphView::selectionCleared, this, &MainWindow::clearInspection);
 }
 
 void MainWindow::addDirectory() {
@@ -121,14 +136,14 @@ void MainWindow::scan() {
 
     // Copy the folder list first so removing an entry during a scan cannot
     // invalidate the loop.
-    std::vector<QString> folders;
+    vector<QString> folders;
     folders.reserve(directoryList->count());
     for (int i = 0; i < directoryList->count(); ++i) {
         folders.push_back(directoryList->item(i)->text());
     }
 
-    std::vector<FileNode> files;
-    std::unordered_set<std::string> seen;
+    vector<FileNode> files;
+    unordered_set<string> seen;
     int skipped = 0;
     int total = static_cast<int>(folders.size());
 
@@ -140,7 +155,7 @@ void MainWindow::scan() {
         ScanResult result = scanDirectory(folder.toStdString());
         skipped += result.skipped;
         for (FileNode& file : result.files) {
-            if (seen.insert(file.path).second) files.push_back(std::move(file));
+            if (seen.insert(file.path).second) files.push_back(move(file));
         }
         progress->setValue((i + 1) * 100 / total);
     }
@@ -148,13 +163,13 @@ void MainWindow::scan() {
     status->setText(QString("Building graph for %1 files...").arg(files.size()));
     QApplication::processEvents();
 
-    graph = buildGraph(std::move(files), thresholdBox->value());
+    graph = buildGraph(move(files), thresholdBox->value());
 
     status->setText("Laying out graph...");
     QApplication::processEvents();
 
     view->setGraph(graph);
-    details->setHtml("<i>Select a node or edge to inspect it.</i>");
+    clearInspection();
 
     status->setText(QString("%1 files, %2 qualifying edges, %3 forest edges, %4 skipped")
         .arg(graph.nodes.size())
@@ -174,6 +189,9 @@ void MainWindow::showNode(int id) {
     if (id < 0 || id >= static_cast<int>(graph.nodes.size())) return;
     const FileNode& node = graph.nodes[id];
 
+    selectedNode = id;
+    openFileButton->setVisible(true);
+
     QString text = "<b>" + QString::fromStdString(node.name).toHtmlEscaped() + "</b><br>";
     text += "Extension: " + (node.extension.empty() ? QString("none") : QString::fromStdString(node.extension).toHtmlEscaped()) + "<br>";
     text += "Path: " + QString::fromStdString(node.path).toHtmlEscaped() + "<br>";
@@ -185,9 +203,12 @@ void MainWindow::showNode(int id) {
 }
 
 void MainWindow::showEdge(int index) {
-    const std::vector<RelationshipEdge>& forest = view->forest();
+    const vector<RelationshipEdge>& forest = view->forest();
     if (index < 0 || index >= static_cast<int>(forest.size())) return;
     const RelationshipEdge& edge = forest[index];
+
+    selectedNode = -1;
+    openFileButton->setVisible(false);
 
     auto name = [this](int id) {
         if (id < 0 || id >= static_cast<int>(graph.nodes.size())) return QString("?");
@@ -202,4 +223,18 @@ void MainWindow::showEdge(int index) {
     text += QString("Metadata similarity: %1<br>").arg(edge.metadata, 0, 'f', 3);
     text += QString("Kruskal cost: %1").arg(edge.cost, 0, 'f', 3);
     details->setHtml(text);
+}
+
+void MainWindow::clearInspection() {
+    selectedNode = -1;
+    openFileButton->setVisible(false);
+    details->setHtml("<i>Select a node or edge to inspect it.</i>");
+}
+
+void MainWindow::openSelectedFile() {
+    if (selectedNode < 0 || selectedNode >= static_cast<int>(graph.nodes.size())) return;
+    const QString path = QString::fromStdString(graph.nodes[selectedNode].path);
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path))) {
+        status->setText("Could not open " + path);
+    }
 }

@@ -6,26 +6,28 @@
 #include "FileScanner.h"
 #include "check.h"
 
-namespace fs = std::filesystem;
+using namespace std;
+
+namespace fs = filesystem;
 
 int main() {
     fs::path base = fs::temp_directory_path() / "frgv_test_scanner";
-    std::error_code error;
+    error_code error;
     fs::remove_all(base, error);
     fs::create_directories(base / "sub" / "deep", error);
     fs::create_directories(base / "empty", error);
 
-    std::ofstream(base / "Report_Final.TXT") << "a";
-    std::ofstream(base / "sub" / "data.csv") << "b";
-    std::ofstream(base / "sub" / "deep" / "image.png") << "c";
-    std::ofstream(base / "sub" / "deep" / "store.db") << "d";
+    ofstream(base / "Report_Final.TXT") << "a";
+    ofstream(base / "sub" / "data.csv") << "b";
+    ofstream(base / "sub" / "deep" / "image.png") << "c";
+    ofstream(base / "sub" / "deep" / "store.db") << "d";
 
     ScanResult scan = scanDirectory(base.u8string());
     check(scan.files.size() == 4, "four files found");
     check(scan.skipped == 0, "no skipped entries");
 
-    std::set<std::string> extensions;
-    std::set<std::string> paths;
+    set<string> extensions;
+    set<string> paths;
     for (const FileNode& file : scan.files) {
         extensions.insert(file.extension);
         paths.insert(file.path);

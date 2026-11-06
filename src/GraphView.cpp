@@ -18,6 +18,8 @@
 #include "GraphLayout.h"
 #include "Kruskal.h"
 
+using namespace std;
+
 namespace {
 
 constexpr int roleType = 0;
@@ -46,7 +48,7 @@ GraphView::GraphView(QWidget* parent) : QGraphicsView(parent), scene(new QGraphi
     connect(scene, &QGraphicsScene::selectionChanged, this, &GraphView::handleSelection);
 }
 
-const std::vector<RelationshipEdge>& GraphView::forest() const {
+const vector<RelationshipEdge>& GraphView::forest() const {
     return forestEdges;
 }
 
@@ -60,7 +62,7 @@ void GraphView::setGraph(const Graph& graph) {
     resetTransform();
 
     forestEdges = kruskal(static_cast<int>(graph.nodes.size()), graph.edges);
-    std::vector<Point> points = computeLayout(static_cast<int>(graph.nodes.size()), forestEdges);
+    vector<Point> points = computeLayout(static_cast<int>(graph.nodes.size()), forestEdges);
 
     if (graph.nodes.empty()) {
         scene->setSceneRect(0, 0, 100, 100);
@@ -70,26 +72,26 @@ void GraphView::setGraph(const Graph& graph) {
     double minX = points[0].x, maxX = points[0].x;
     double minY = points[0].y, maxY = points[0].y;
     for (const Point& point : points) {
-        minX = std::min(minX, point.x);
-        maxX = std::max(maxX, point.x);
-        minY = std::min(minY, point.y);
-        maxY = std::max(maxY, point.y);
+        minX = min(minX, point.x);
+        maxX = max(maxX, point.x);
+        minY = min(minY, point.y);
+        maxY = max(maxY, point.y);
     }
 
     double width = maxX - minX;
     double height = maxY - minY;
     double targetAspect = 1.65;
     if (viewport()->height() > 0) {
-        targetAspect = std::clamp(static_cast<double>(viewport()->width()) / viewport()->height(), 1.0, 2.5);
+        targetAspect = clamp(static_cast<double>(viewport()->width()) / viewport()->height(), 1.0, 2.5);
     }
     if (width > 0 && height > 0) {
         double aspect = width / height;
         if (aspect < targetAspect) {
-            double factor = std::min(targetAspect / aspect, stretchLimit);
+            double factor = min(targetAspect / aspect, stretchLimit);
             double centerX = (minX + maxX) / 2.0;
             for (Point& point : points) point.x = centerX + (point.x - centerX) * factor;
         } else {
-            double factor = std::min(aspect / targetAspect, stretchLimit);
+            double factor = min(aspect / targetAspect, stretchLimit);
             double centerY = (minY + maxY) / 2.0;
             for (Point& point : points) point.y = centerY + (point.y - centerY) * factor;
         }
@@ -98,7 +100,7 @@ void GraphView::setGraph(const Graph& graph) {
     double centerX = (minX + maxX) / 2.0;
     QPen edgePen(edgeColor);
     edgePen.setWidth(2);
-    for (std::size_t i = 0; i < forestEdges.size(); ++i) {
+    for (size_t i = 0; i < forestEdges.size(); ++i) {
         const RelationshipEdge& edge = forestEdges[i];
         QGraphicsLineItem* item = scene->addLine(points[edge.a].x, points[edge.a].y,
             points[edge.b].x, points[edge.b].y, edgePen);
@@ -109,7 +111,7 @@ void GraphView::setGraph(const Graph& graph) {
 
     QFont labelFont;
     labelFont.setPointSize(8);
-    for (std::size_t i = 0; i < graph.nodes.size(); ++i) {
+    for (size_t i = 0; i < graph.nodes.size(); ++i) {
         QGraphicsEllipseItem* item = scene->addEllipse(points[i].x - radius, points[i].y - radius,
             radius * 2, radius * 2, QPen(QColor(60, 60, 60)), QBrush(nodeColor));
         item->setData(roleType, nodeType);
@@ -155,7 +157,7 @@ void GraphView::updateLabels() {
         edgeB = forestEdges[selectedEdge].b;
     }
 
-    for (std::size_t i = 0; i < labels.size(); ++i) {
+    for (size_t i = 0; i < labels.size(); ++i) {
         int id = static_cast<int>(i);
         labels[i]->setVisible(showAll || id == selectedNode || id == edgeA || id == edgeB);
     }
@@ -181,6 +183,7 @@ void GraphView::handleSelection() {
     if (selected.isEmpty()) {
         selectedNode = -1;
         selectedEdge = -1;
+        emit selectionCleared();
         updateLabels();
         return;
     }

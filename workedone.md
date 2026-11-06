@@ -29,3 +29,9 @@
 - **Files:** `src/GraphLayout.cpp`, `todo.md`, `workedone.md`.
 - **Checks:** Release build succeeded; all 6 test suites pass. `sample_data` (610 nodes, 8835 candidate edges, 531 forest edges, 79 components) lays out in ~100 ms within bounds `1400x683.9`. Offscreen UI harness re-ran repeated scans/selection, re-entrant scan, and remove-during-scan with no crashes; screenshot shows separated component islands.
 - **Follow-up:** The largest components (219 and 67 nodes) remain dense when zoomed out; this is expected for the O(n²) force layout. Use pan/zoom and selection to inspect them.
+
+## 2026-11-06 (open file from details)
+- **Completed:** Selecting a graph node now shows an **Open File** button in the bottom details panel. The button opens the selected file with the system default application via `QDesktopServices`, and hides again when an edge is selected, the scene selection clears, or a new scan runs.
+- **Files:** `src/MainWindow.cpp`, `src/GraphView.cpp`, `include/MainWindow.h`, `include/GraphView.h`, `README.md`, `workedone.md`.
+- **Checks:** Release build succeeded; all 6 test suites pass; offscreen launch smoke test stayed running without crashing.
+- **Follow-up:** None.

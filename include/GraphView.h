@@ -7,6 +7,8 @@
 #include "GraphBuilder.h"
 #include "RelationshipEdge.h"
 
+using namespace std;
+
 class QGraphicsScene;
 class QGraphicsItem;
 class QGraphicsSimpleTextItem;
@@ -18,11 +20,12 @@ public:
     explicit GraphView(QWidget* parent = nullptr);
 
     void setGraph(const Graph& graph);
-    const std::vector<RelationshipEdge>& forest() const;
+    const vector<RelationshipEdge>& forest() const;
 
 signals:
     void nodeSelected(int id);
     void edgeSelected(int index);
+    void selectionCleared();
 
 protected:
     void wheelEvent(QWheelEvent* event) override;
@@ -32,8 +35,8 @@ private:
     void updateLabels();
 
     QGraphicsScene* scene;
-    std::vector<RelationshipEdge> forestEdges;
-    std::vector<QGraphicsSimpleTextItem*> labels;
+    vector<RelationshipEdge> forestEdges;
+    vector<QGraphicsSimpleTextItem*> labels;
     QGraphicsItem* highlighted = nullptr;
     int selectedNode = -1;
     int selectedEdge = -1;

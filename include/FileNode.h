@@ -4,16 +4,18 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 struct FileNode {
     int id = -1;
-    std::string name;
-    std::string stem;
-    std::string extension;
-    std::string path;
-    std::string dir;
-    std::uintmax_t size = 0;
+    string name;
+    string stem;
+    string extension;
+    string path;
+    string dir;
+    uintmax_t size = 0;
     bool hasSize = false;
-    std::int64_t modified = 0;
+    int64_t modified = 0;
     bool hasTime = false;
-    std::vector<std::string> tokens;
+    vector<string> tokens;
 };

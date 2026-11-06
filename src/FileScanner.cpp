@@ -5,11 +5,13 @@
 
 #include "MetadataCollector.h"
 
-ScanResult scanDirectory(const std::string& root) {
-    namespace fs = std::filesystem;
+using namespace std;
+
+ScanResult scanDirectory(const string& root) {
+    namespace fs = filesystem;
 
     ScanResult result;
-    std::error_code error;
+    error_code error;
     fs::path start = fs::u8path(root);
     fs::recursive_directory_iterator it(start, fs::directory_options::skip_permission_denied, error);
     fs::recursive_directory_iterator end;

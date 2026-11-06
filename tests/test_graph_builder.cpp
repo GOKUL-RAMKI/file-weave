@@ -8,17 +8,19 @@
 #include "GraphBuilder.h"
 #include "check.h"
 
+using namespace std;
+
 namespace {
 
-FileNode makeNode(const std::string& name, const std::string& dir, std::uintmax_t size) {
+FileNode makeNode(const string& name, const string& dir, uintmax_t size) {
     FileNode file;
     file.name = name;
     file.path = dir + "/" + name;
     file.dir = dir;
     file.size = size;
     file.hasSize = true;
-    std::size_t dot = name.find_last_of('.');
-    file.extension = dot == std::string::npos ? std::string() : name.substr(dot + 1);
+    size_t dot = name.find_last_of('.');
+    file.extension = dot == string::npos ? string() : name.substr(dot + 1);
     return file;
 }
 
@@ -73,10 +75,10 @@ int main() {
         makeNode("shared_c.txt", "D:/work", 10)
     }, 0.5);
     check(shared.edges.size() == 3, "all candidate pairs scored");
-    std::set<std::pair<int, int>> unique;
+    set<pair<int, int>> unique;
     for (const RelationshipEdge& edge : shared.edges) {
         check(edge.a != edge.b, "no self edge");
-        unique.insert({std::min(edge.a, edge.b), std::max(edge.a, edge.b)});
+        unique.insert({min(edge.a, edge.b), max(edge.a, edge.b)});
     }
     check(unique.size() == shared.edges.size(), "no duplicate edges");
     check(countEdges(shared, 0, 1) == 1, "pair stored once");

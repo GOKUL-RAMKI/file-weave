@@ -2,6 +2,8 @@
 
 #include <vector>
 
+using namespace std;
+
 class DisjointSet {
 public:
     explicit DisjointSet(int count);
@@ -9,6 +11,6 @@ public:
     bool unite(int a, int b);
 
 private:
-    std::vector<int> parent;
-    std::vector<int> rank;
+    vector<int> parent;
+    vector<int> rank;
 };

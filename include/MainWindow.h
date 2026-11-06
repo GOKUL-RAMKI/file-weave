@@ -24,6 +24,8 @@ private:
     void scan();
     void showNode(int id);
     void showEdge(int index);
+    void clearInspection();
+    void openSelectedFile();
 
     QListWidget* directoryList;
     QPushButton* addButton;
@@ -33,7 +35,9 @@ private:
     QProgressBar* progress;
     QLabel* status;
     QTextBrowser* details;
+    QPushButton* openFileButton;
     GraphView* view;
     Graph graph;
+    int selectedNode = -1;
     bool scanning = false;
 };
